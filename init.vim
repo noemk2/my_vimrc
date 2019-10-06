@@ -1,19 +1,24 @@
 call plug#begin('~/.vim/plugged')
+" Make sure you use single quotes 
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'fishbullet/deoplete-ruby'
+" end
+Plug 'sbdchd/neoformat'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-fugitive'
 Plug 'mattn/emmet-vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dense-analysis/ale'
 Plug 'scrooloose/nerdcommenter'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-surround'
 Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plug 'scrooloose/nerdcommenter'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -22,22 +27,34 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
-
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 let g:deoplete#enable_at_startup = 1
 call plug#end()
-inoremap { {<CR>}<Esc>ko
-"inoremap {<CR> {<CR>}<C-o>O
+let g:neoformat_try_formatprg = 1
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+"inoremap { {}<Esc>ko
+inoremap ( ()<Esc>i
+inoremap [ []<Esc>i
+inoremap { {}<Esc>i
+inoremap " ""<Esc>i
+inoremap ' ''<Esc>i
+inoremap <C-k> <bar>
+
+"inoremap <bar> <tab>
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
 let mapleader=","
 
-set history=10000
+set history=4000
 set number
-nmap <c-s> :Prettier<cr> :w! <cr>
+"add neoformat  by prettier js
+"end 
+nmap <c-s> :Neoformat <cr> :w! <cr>
 map <F2> :wq! <CR>
-map <F3> :w! <CR>
+map <F5> :w! <CR>
 map <F4> :q! <CR>
 :nnoremap <C-n> :NERDTreeToggle<CR>
 let g:deoplete#enable_at_startup = 1
@@ -49,10 +66,12 @@ let g:deoplete#enable_at_startup = 1
     \ 'auto_complete_delay': 200,
     \ 'smart_case': v:true,
     \ })
+"inoremap <expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
 inoremap <silent><expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <silent><expr> <Up>   pumvisible() ? "\<C-p>" : "\<Up>"
-"
-imap <TAB>     <Plug>(neosnippet_expand_or_jump)
+
+imap  <bar>    <Plug>(neosnippet_expand_or_jump)
+""imap  <Tab>    <Plug>(neosnippet_expand_or_jump)
 "
 filetype plugin on
 " For conceal markers.
